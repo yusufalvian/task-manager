@@ -17,12 +17,12 @@ import { httpsCallable } from 'firebase/functions';
 import { functions } from './firebase';
 import { signOut } from 'firebase/auth';
 
-
 const validateEmptyString = httpsCallable(functions, 'validateEmptyString');
 
 const Tasks = () => {
   const { user } = useAuth();
   const [tasks, setTasks] = useState([]);
+  const [sortOrder, setSortOrder] = useState('asc'); 
   const [newTask, setNewTask] = useState({
     title: '',
     description: '',
@@ -177,6 +177,29 @@ const Tasks = () => {
     setEditingTask({ ...task });
   };
 
+  const handleSort = () => {
+    const sortedTasks = [...tasks].sort((a, b) => {
+      const dateA = new Date(a.dueDate);
+      const dateB = new Date(b.dueDate);
+      return sortOrder === 'asc' ? dateA - dateB : dateB - dateA;
+    });
+    setTasks(sortedTasks);
+    setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+  };
+
+  // Add function to check if task is overdue
+  const isOverdue = (dueDate) => {
+    return new Date(dueDate) < new Date();
+  };
+
+  // Add function to get due date style
+  const getDueDateStyle = (dueDate) => {
+    return {
+      color: isOverdue(dueDate) ? '#dc2626' : '#16a34a', // red for overdue, green for not overdue
+      fontWeight: '500'
+    };
+  };
+
   return (
     <div style={styles.container}>
       <div style={styles.header}>
@@ -253,7 +276,12 @@ const Tasks = () => {
           {/* Right Column - Task List */}
           <div style={{...styles.column, ...styles.columnRight}}>
             <div style={styles.section}>
-              <h3 style={styles.sectionTitle}>Your Tasks</h3>
+              <h3 style={styles.sectionTitle}>
+                Your Tasks
+                <button onClick={handleSort} style={styles.sortButton}>
+                  {sortOrder === 'asc' ? '↑' : '↓'}
+                </button>
+              </h3>
               <div style={styles.tasksContainer}>
                 {tasks.length === 0 ? (
                   <p>No tasks yet. Create one in the left panel!</p>
@@ -273,7 +301,9 @@ const Tasks = () => {
                       </div>
                       <p style={styles.taskDescription}>{task.description}</p>
                       <div style={styles.taskMeta}>
-                        <span>Due: {new Date(task.dueDate).toLocaleString()}</span>
+                        <span style={getDueDateStyle(task.dueDate)}>
+                          Due: {new Date(task.dueDate).toLocaleString()}
+                        </span>
                         <span>Created: {new Date(task.createdAt).toLocaleString()}</span>
                       </div>
                     </div>
@@ -371,9 +401,12 @@ const styles = {
     overflow: 'hidden',
   },
   sectionTitle: {
-    color: '#1e40af',
+    fontSize: '1.5rem',
     marginBottom: '1rem',
-    flexShrink: 0,
+    display: 'flex',
+    alignItems: 'center',
+    gap: '0.75rem',
+    color: '#1e40af',
   },
   form: {
     display: 'flex',
@@ -478,6 +511,14 @@ const styles = {
     padding: '0.75rem',
     borderRadius: '4px',
     marginBottom: '1rem',
+  },
+  sortButton: {
+    background: 'none',
+    border: 'none',
+    cursor: 'pointer',
+    fontSize: '1.25rem',
+    padding: '4px 8px',
+    color: '#666',
   },
 };
 

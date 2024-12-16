@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from './firebase';
 
+// eye icon to show and hide password
 const EyeIcon = ({ open }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -73,49 +74,6 @@ const Login = () => {
       setLoading(false);
     }
   };
-
-  // return (
-  //   <div style={styles.container}>
-  //     <h2>Login</h2>
-  //     {error && <div style={styles.error}>{error}</div>}
-  //     <form onSubmit={handleSubmit} style={styles.form}>
-  //       <div style={styles.inputGroup}>
-  //         <input
-  //           type="email"
-  //           value={username}
-  //           onChange={(e) => setUsername(e.target.value)}
-  //           placeholder="Email"
-  //           style={styles.input}
-  //         />
-  //       </div>
-  //       <div style={styles.inputGroup}>
-  //         <div style={styles.passwordContainer}>
-  //           <input
-  //             type={showPassword ? "text" : "password"}
-  //             value={password}
-  //             onChange={(e) => setPassword(e.target.value)}
-  //             placeholder="Password"
-  //             style={styles.passwordInput}
-  //           />
-  //           <button
-  //             type="button"
-  //             onClick={() => setShowPassword(!showPassword)}
-  //             style={styles.showPasswordButton}
-  //           >
-  //             {showPassword ? "Hide" : "Show"}
-  //           </button>
-  //         </div>
-  //       </div>
-  //       <button 
-  //         type="submit" 
-  //         style={styles.button}
-  //         disabled={loading}
-  //       >
-  //         {loading ? 'Logging in...' : 'Login'}
-  //       </button>
-  //     </form>
-  //   </div>
-  // );
 
   return (
     <div style={styles.container}>
