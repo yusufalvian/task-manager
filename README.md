@@ -10,6 +10,8 @@ contact me to get user and password
 
 ![preview](./public/img/preview.png)
 
+![email](./public/img/email-notif.png)
+
 
 ### features
 - authentication using email and password
