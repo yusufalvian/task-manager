@@ -4,7 +4,7 @@ task manager app where you can create, update, delete and manage your tasks.
 
 live demo : https://challenge-1-ba851.web.app/
 
-you can contact me to get user and password 
+contact me to get user and password 
 
 ### preview  
 
@@ -30,6 +30,7 @@ you can contact me to get user and password
 ### update firebase functions 
 - npm install -g firebase-tools
 - firebase login
+- setup env file for firebase function in folder functions
 - update functions code in functions/index.js
 - firebase deploy --only functions  
 

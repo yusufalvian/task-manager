@@ -6,7 +6,8 @@ import { getFirestore } from 'firebase-admin/firestore';
 import { SESClient, SendEmailCommand } from "@aws-sdk/client-ses";
 import { getAuth } from 'firebase-admin/auth';
 import { defineString } from 'firebase-functions/params';
-// Initialize Firebase Admin
+
+
 initializeApp();
 
 export const validateEmptyString = onCall({
