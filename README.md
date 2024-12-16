@@ -17,7 +17,7 @@ contact me to get user and password
 - only authenticated users can create, update, delete and manage tasks
 - users can only access their own tasks
 - validate title and description using firebase functions
-- send notification email to the user when a task is overdue
+- send notification email to the user when a task is overdue. Checking overdue tasks is done every day at 00:00
 - real time capability to instantly reflect changes in the task list without refreshing the page
 - task list is ordered by due date (ascending)
 
@@ -47,4 +47,10 @@ contact me to get user and password
 - firebase functions -> to handle server-side logic
 - firebase hosting -> to deploy the web app
 - AWS SES -> to send email notifications
+
+
+### challenge
+- challenge : first time develop frontend app, first time using react.js, first time using all firebase services, and first time using AWS SES
+- use chatgpt to explore and get early understanding of how each of those technologies work and how to use them
+- use windsurf IDE (claude sonnet 3.5) to build the app and find solution when facing bugs 
 
