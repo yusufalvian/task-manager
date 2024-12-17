@@ -8,8 +8,6 @@ contact me to get user and password
 
 ### preview  
 
-![login](./public/img/login-preview.png)
-
 ![preview](./public/img/preview.png)
 
 ![email](./public/img/email-notif.png)
