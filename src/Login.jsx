@@ -29,6 +29,12 @@ const EyeIcon = ({ open }) => (
   </svg>
 );
 
+const Spinner = () => (
+  <div style={styles.spinnerContainer}>
+    <div style={styles.spinner}></div>
+  </div>
+);
+
 const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -51,10 +57,12 @@ const Login = () => {
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true); // Set loading to true at the start
 
     // Simple validation
     if (username === '' || password === '') {
       setError('Both fields are required.');
+      setLoading(false); // Don't forget to set loading to false if validation fails
       return;
     }
 
@@ -140,11 +148,16 @@ const Login = () => {
             type="submit" 
             style={{
               ...styles.button,
-              width: '100%', // Make button width same as input
-              opacity: loading ? 0.7 : 1, // Visual feedback for loading state
+              width: '100%',
+              opacity: loading ? 0.7 : 1,
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              gap: '8px',
             }}
             disabled={loading}
           >
+            {loading && <Spinner />}
             {loading ? 'Logging in...' : 'Login'}
           </button>
         </form>
@@ -247,7 +260,8 @@ const styles = {
     borderRadius: '4px',
     fontSize: '1rem',
     cursor: 'pointer',
-    transition: 'background-color 0.3s, opacity 0.3s',
+    transition: 'all 0.3s ease',
+    position: 'relative',
   },
   error: {
     color: '#e53e3e', // Red
@@ -264,6 +278,31 @@ const styles = {
     color: '#3b82f6', // Blue
     textDecoration: 'none',
   },
+  spinnerContainer: {
+    display: 'inline-block',
+    width: '16px',
+    height: '16px',
+  },
+  spinner: {
+    width: '16px',
+    height: '16px',
+    border: '2px solid rgba(255, 255, 255, 0.3)',
+    borderRadius: '50%',
+    borderTopColor: '#fff',
+    animation: 'spin 0.8s linear infinite',
+  },
 };
+
+const spinKeyframes = `
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+`;
+
+const styleTag = document.createElement('style');
+styleTag.innerHTML = spinKeyframes;
+document.head.appendChild(styleTag);
 
 export default Login;
