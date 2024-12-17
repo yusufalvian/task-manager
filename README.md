@@ -26,7 +26,9 @@ contact me to get user and password
 - task list is ordered by due date (ascending)
 
 ### run locally
-- make sure to use node version 22.12.0
+- clone this repository
+- go to root directory
+- make sure to use node version 22.12.0. you can use nvm to change node version 
 - npm install
 - setup env for firebase config in root directory
 - npm run dev

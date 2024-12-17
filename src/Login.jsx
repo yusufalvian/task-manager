@@ -29,12 +29,15 @@ const EyeIcon = ({ open }) => (
   </svg>
 );
 
+// loading spinner animation 
+// used to show loading state in login button
 const Spinner = () => (
   <div style={styles.spinnerContainer}>
     <div style={styles.spinner}></div>
   </div>
 );
 
+// login component
 const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -43,9 +46,11 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
 
+  // react router to navigate to "tasks" page when login is successful
   const navigate = useNavigate();
 
-  // Check for saved email on component mount
+  // 'remember me' feature
+  // check for saved email on component mount
   useEffect(() => {
     const savedEmail = localStorage.getItem('rememberedEmail');
     if (savedEmail) {
@@ -54,33 +59,36 @@ const Login = () => {
     }
   }, []);
 
-  // Handle form submission
+  // handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true); // Set loading to true at the start
+    setLoading(true); // set loading to true at the start
 
-    // Simple validation
+    // simple validation
     if (username === '' || password === '') {
       setError('Both fields are required.');
-      setLoading(false); // Don't forget to set loading to false if validation fails
+      setLoading(false); // set loading to false if validation fails
       return;
     }
 
     try {
-      // Handle remember me
+
+      // handle remember me
       if (rememberMe) {
         localStorage.setItem('rememberedEmail', username);
       } else {
         localStorage.removeItem('rememberedEmail');
       }
 
-      // Sign in with Firebase
+      // sign in with Firebase
       await signInWithEmailAndPassword(auth, username, password);
-      // If successful, navigate to tasks page
+
+      // ff successful, navigate to tasks page
       navigate('/tasks');
+
     } catch (error) {
       console.log(error)
-      // Handle specific Firebase auth errors
+      // handle firebase auth errors
       switch (error.code) {
         case 'auth/invalid-email':
           setError('Invalid email address format.');
@@ -161,14 +169,12 @@ const Login = () => {
             {loading ? 'Logging in...' : 'Login'}
           </button>
         </form>
-        {/* <p style={styles.signupText}>
-          Don't have an account? <a href="/signup" style={styles.signupLink}>Sign up</a>
-        </p> */}
       </div>
     </div>
   );
 };
 
+// styles for the login page
 const styles = {
   container: {
     display: 'flex',
@@ -293,6 +299,7 @@ const styles = {
   },
 };
 
+// keyframes for the loading spinner
 const spinKeyframes = `
   @keyframes spin {
     to {
@@ -300,7 +307,6 @@ const spinKeyframes = `
     }
   }
 `;
-
 const styleTag = document.createElement('style');
 styleTag.innerHTML = spinKeyframes;
 document.head.appendChild(styleTag);

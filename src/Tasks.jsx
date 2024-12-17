@@ -17,14 +17,18 @@ import { httpsCallable } from 'firebase/functions';
 import { functions } from './firebase';
 import { signOut } from 'firebase/auth';
 
+// firebase function to validate empty string
 const validateEmptyString = httpsCallable(functions, 'validateEmptyString');
 
+// loading spinner animation
+// used to show loading state in submit button
 const Spinner = () => (
   <div style={styles.spinnerContainer}>
     <div style={styles.spinner}></div>
   </div>
 );
 
+// tasks component
 const Tasks = () => {
   const { user } = useAuth();
   const [tasks, setTasks] = useState([]);
@@ -35,45 +39,39 @@ const Tasks = () => {
     dueDate: ''
   });
   const [editingTask, setEditingTask] = useState(null);
-  const [loading, setLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false); 
   const [error, setError] = useState(null);
 
   const handleLogout = async () => {
     try {
       await signOut(auth);
-      // PrivateRoute will automatically redirect to home page
+      // privateRoute will automatically redirect to home page
     } catch (error) {
       console.error('Error logging out:', error);
       setError('Failed to logout. Please try again.');
     }
   };
 
-  // Fetch tasks from Firestore
+  // fetch tasks from Firestore
   useEffect(() => {
     const fetchTasks = async () => {
       try {
-        console.log("user.uid ", user.uid)
         const tasksQuery = query(
           collection(db, 'tasks'),
           where('userId', '==', user.uid),
           orderBy('dueDate', 'asc')
         );
         const querySnapshot = await getDocs(tasksQuery);
-        console.log(querySnapshot)
         const tasksData = querySnapshot.docs.map(doc => ({
           id: doc.id,
           ...doc.data(),
           dueDate: doc.data().dueDate.toDate().toISOString(),
           createdAt: doc.data().createdAt.toDate().toISOString()
         }));
-        console.log(tasksData)
         setTasks(tasksData);
       } catch (err) {
         console.error('Error fetching tasks:', err);
         setError('Failed to load tasks');
-      } finally {
-        setLoading(false);
       }
     };
 
@@ -82,11 +80,10 @@ const Tasks = () => {
     }
   }, [user]);
 
-  // Validate input string
+  // validate input string when create new task
   const validateInput = async (value, fieldName) => {
     try {
       const result = await validateEmptyString({ inputString: value });
-      console.log("result :  ", result)    
       if (!result.data.success) {
         throw new Error(`${fieldName} ${result.data.message}`);
       }
@@ -98,20 +95,23 @@ const Tasks = () => {
   };
 
 
-  // Create a new task
+  // create a new task
    const handleCreateTask = async (e) => {
     e.preventDefault();
     setIsSubmitting(true); 
     try {
-        // Validate title and description
-      const isTitleValid = await validateInput(newTask.title, 'Title');
-      const isDescriptionValid = await validateInput(newTask.description, 'Description');
+
+      // validate title and description
+      const isTitleValid = await validateInput(newTask.title, 'Title and Description');
+      const isDescriptionValid = await validateInput(newTask.description, 'Title and Description');
       
+      // if validation fails, stop creating task
       if (!isTitleValid || !isDescriptionValid) {
         setIsSubmitting(false); 
         return;
       }
 
+      // new task data
       const taskData = {
         userId: user.uid,
         title: newTask.title,
@@ -120,6 +120,7 @@ const Tasks = () => {
         createdAt: new Date()
       };
 
+      // add new task to Firestore
       const docRef = await addDoc(collection(db, 'tasks'), taskData);
       const newTaskWithId = {
         id: docRef.id,
@@ -128,8 +129,8 @@ const Tasks = () => {
         createdAt: taskData.createdAt.toISOString()
       };
 
-      setTasks([newTaskWithId, ...tasks]);
-      setNewTask({ title: '', description: '', dueDate: '' });
+      setTasks([newTaskWithId, ...tasks]); // add new task to task list
+      setNewTask({ title: '', description: '', dueDate: '' }); // reset form
     } catch (err) {
       console.error('Error creating task:', err);
       setError('Failed to create task');
@@ -139,7 +140,7 @@ const Tasks = () => {
   };
 
 
-  // Update a task
+  // update a task
   const handleUpdateTask = async (e) => {
     e.preventDefault();
     try {
@@ -171,7 +172,7 @@ const Tasks = () => {
   };
 
 
-  // Delete a task
+  // delete a task
   const handleDeleteTask = async (taskId) => {
     console.log("taskId : ",taskId)
     try {
@@ -183,11 +184,12 @@ const Tasks = () => {
     }
   };
 
-  // Start editing a task
+  // start editing a task
   const startEdit = (task) => {
     setEditingTask({ ...task });
   };
 
+  // sort tasks by due date
   const handleSort = () => {
     const sortedTasks = [...tasks].sort((a, b) => {
       const dateA = new Date(a.dueDate);
@@ -198,15 +200,16 @@ const Tasks = () => {
     setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
   };
 
-  // Add function to check if task is overdue
+  // check if task is overdue
   const isOverdue = (dueDate) => {
     return new Date(dueDate) < new Date();
   };
 
-  // Add function to get due date style
+  // due date style
+  // overdue tasks are red, not overdue tasks are green
   const getDueDateStyle = (dueDate) => {
     return {
-      color: isOverdue(dueDate) ? '#dc2626' : '#16a34a', // red for overdue, green for not overdue
+      color: isOverdue(dueDate) ? '#dc2626' : '#16a34a', 
       fontWeight: '500'
     };
   };
@@ -341,6 +344,7 @@ const Tasks = () => {
   );
 };
 
+// styles for the tasks page
 const styles = {
   container: {
     flex: 1,
@@ -558,6 +562,7 @@ const styles = {
   },
 };
 
+// keyframes for the loading spinner
 const spinKeyframes = `
   @keyframes spin {
     to {

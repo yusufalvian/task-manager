@@ -1,7 +1,8 @@
 import React from 'react';
-import { Route, Navigate } from 'react-router-dom';
-import { auth } from './firebase';  // Import Firebase authentication
+import { Navigate } from 'react-router-dom';
 import { useAuth } from './AuthContext';
+
+// privateRoute component is a protection wrapper for routes that should only be accessible to authenticated users.  
 const PrivateRoute = ({ element }) => {
     const { user } = useAuth();
     
