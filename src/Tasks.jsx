@@ -19,6 +19,12 @@ import { signOut } from 'firebase/auth';
 
 const validateEmptyString = httpsCallable(functions, 'validateEmptyString');
 
+const Spinner = () => (
+  <div style={styles.spinnerContainer}>
+    <div style={styles.spinner}></div>
+  </div>
+);
+
 const Tasks = () => {
   const { user } = useAuth();
   const [tasks, setTasks] = useState([]);
@@ -30,6 +36,7 @@ const Tasks = () => {
   });
   const [editingTask, setEditingTask] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false); 
   const [error, setError] = useState(null);
 
   const handleLogout = async () => {
@@ -94,12 +101,14 @@ const Tasks = () => {
   // Create a new task
    const handleCreateTask = async (e) => {
     e.preventDefault();
+    setIsSubmitting(true); 
     try {
         // Validate title and description
       const isTitleValid = await validateInput(newTask.title, 'Title');
       const isDescriptionValid = await validateInput(newTask.description, 'Description');
       
       if (!isTitleValid || !isDescriptionValid) {
+        setIsSubmitting(false); 
         return;
       }
 
@@ -124,6 +133,8 @@ const Tasks = () => {
     } catch (err) {
       console.error('Error creating task:', err);
       setError('Failed to create task');
+    } finally {
+      setIsSubmitting(false); 
     }
   };
 
@@ -257,8 +268,20 @@ const Tasks = () => {
                   style={styles.input}
                   required
                 />
-                <button type="submit" style={styles.button}>
-                  {editingTask ? 'Update Task' : 'Create Task'}
+                <button 
+                  type="submit" 
+                  style={{
+                    ...styles.button,
+                    opacity: isSubmitting ? 0.7 : 1,
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    gap: '8px',
+                  }}
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting && <Spinner />}
+                  {editingTask ? 'Update Task' : (isSubmitting ? 'Creating Task...' : 'Create Task')}
                 </button>
                 {editingTask && (
                   <button 
@@ -520,6 +543,31 @@ const styles = {
     padding: '4px 8px',
     color: '#666',
   },
+  spinnerContainer: {
+    display: 'inline-block',
+    width: '16px',
+    height: '16px',
+  },
+  spinner: {
+    width: '16px',
+    height: '16px',
+    border: '2px solid rgba(255, 255, 255, 0.3)',
+    borderRadius: '50%',
+    borderTopColor: '#fff',
+    animation: 'spin 0.8s linear infinite',
+  },
 };
+
+const spinKeyframes = `
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+`;
+
+const styleTag = document.createElement('style');
+styleTag.innerHTML = spinKeyframes;
+document.head.appendChild(styleTag);
 
 export default Tasks;
