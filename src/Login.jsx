@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from './firebase';
@@ -35,8 +35,18 @@ const Login = () => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false);
 
   const navigate = useNavigate();
+
+  // Check for saved email on component mount
+  useEffect(() => {
+    const savedEmail = localStorage.getItem('rememberedEmail');
+    if (savedEmail) {
+      setUsername(savedEmail);
+      setRememberMe(true);
+    }
+  }, []);
 
   // Handle form submission
   const handleSubmit = async (e) => {
@@ -49,6 +59,13 @@ const Login = () => {
     }
 
     try {
+      // Handle remember me
+      if (rememberMe) {
+        localStorage.setItem('rememberedEmail', username);
+      } else {
+        localStorage.removeItem('rememberedEmail');
+      }
+
       // Sign in with Firebase
       await signInWithEmailAndPassword(auth, username, password);
       // If successful, navigate to tasks page
@@ -98,15 +115,25 @@ const Login = () => {
                 placeholder="Password"
                 style={styles.input}
               />
-                <button
+              <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                style={styles.showPasswordButton}
-                aria-label={showPassword ? "Hide password" : "Show password"}
+                style={styles.eyeButton}
               >
                 <EyeIcon open={showPassword} />
               </button>
             </div>
+          </div>
+          <div style={styles.rememberMeContainer}>
+            <label style={styles.rememberMeLabel}>
+              <input
+                type="checkbox"
+                checked={rememberMe}
+                onChange={(e) => setRememberMe(e.target.checked)}
+                style={styles.checkbox}
+              />
+              Remember Me
+            </label>
           </div>
           {error && <div style={styles.error}>{error}</div>}
           <button 
@@ -182,7 +209,7 @@ const styles = {
     position: 'relative',
     width: '100%',
   },
-  showPasswordButton: {
+  eyeButton: {
     position: 'absolute',
     right: '10px',
     top: '50%',
@@ -195,6 +222,22 @@ const styles = {
     alignItems: 'center',
     justifyContent: 'center',
     color: '#4a5568',
+  },
+  rememberMeContainer: {
+    marginBottom: '15px',
+    display: 'flex',
+    alignItems: 'center',
+  },
+  rememberMeLabel: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '8px',
+    cursor: 'pointer',
+    fontSize: '14px',
+    color: '#666',
+  },
+  checkbox: {
+    cursor: 'pointer',
   },
   button: {
     backgroundColor: '#3b82f6', // Blue
@@ -222,6 +265,5 @@ const styles = {
     textDecoration: 'none',
   },
 };
-
 
 export default Login;
