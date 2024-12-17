@@ -21,7 +21,7 @@ contact me to get user and password
 - validate title and description using firebase functions
 - send notification email to the user when a task is overdue. Checking overdue tasks is done every day at 00:00
 - real time capability to instantly reflect changes in the task list without refreshing the page
-- task list is ordered by due date (ascending)
+- sort tasks by due date
 
 ### run locally
 - clone this repository
