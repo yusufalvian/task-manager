@@ -26,4 +26,4 @@ const functions = getFunctions(app, 'us-central1');
 // Initialize Firestore
 const db = getFirestore(app);
 
-export { auth, db, functions };  // Export auth to use in your app
+export { auth, db, functions };  
