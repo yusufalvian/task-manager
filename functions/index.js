@@ -64,8 +64,8 @@ const awsSecretAccessKey = defineString('AWS_SECRET_ACCESS_KEY')
 const ses = new SESClient({
     region: "ap-southeast-2", // Replace with your AWS region
     credentials: {
-        accessKeyId: awsAccessKeyId.value() ,
-        secretAccessKey: awsSecretAccessKey.value() 
+        accessKeyId: awsAccessKeyId.value(), 
+        secretAccessKey: awsSecretAccessKey.value()
     }
 });
 

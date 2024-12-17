@@ -55,5 +55,5 @@ contact me to get user and password
 - challenge : first time develop frontend app, first time using react.js, first time using all firebase services, and first time using AWS SES
 - use chatgpt to explore and get early understanding of how each of those technologies work and how to use them
 - use windsurf IDE (claude sonnet 3.5) to build the app and find solution when facing bugs 
-- sometime, chatgpt or clause sonnet 3.5 doesn't give the right answer about firebase due to version mismatch, so reading firebase documentation still really help
+- sometime, chatgpt or claude sonnet 3.5 doesn't give the right answer about firebase due to version mismatch, so reading firebase documentation still really help
 
