@@ -5,3 +5,5 @@ firebase-debug.*.log
 pubsub-debug.log
 firestore-debug.log
 dist
+.firebase
+
