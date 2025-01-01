@@ -29,14 +29,6 @@ contact me to get user and password
 - make sure to use node version 22.12.0. you can use nvm to install and change node version 
 - npm install
 - setup env for firebase config in root directory
-```
-VITE_FIREBASE_API_KEY=
-VITE_FIREBASE_AUTH_DOMAIN=
-VITE_FIREBASE_PROJECT_ID=
-VITE_FIREBASE_STORAGE_BUCKET=
-VITE_FIREBASE_MESSAGING_SENDER_ID=
-VITE_FIREBASE_APP_ID=
-```
 - npm run dev
 
 ### update firebase functions 
@@ -59,11 +51,4 @@ VITE_FIREBASE_APP_ID=
 - firebase functions -> to handle server-side logic
 - firebase hosting -> to deploy the web app
 - AWS SES -> to send email notifications
-
-
-### challenge
-- challenge : first time develop frontend app, first time using react.js, first time using all firebase services, and first time using AWS SES
-- use chatgpt to explore and get early understanding of how each of those technologies work and how to use them
-- use windsurf IDE (claude sonnet 3.5) to build the app and find solution when facing bugs 
-- sometime, chatgpt or claude sonnet 3.5 doesn't give the right answer about firebase due to version mismatch, so reading firebase documentation still really help
 
