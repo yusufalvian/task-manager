@@ -118,15 +118,17 @@ return (
           onChange={(e) => setPassword(e.target.value)}
           placeholder="Password"
           variant="outlined"
-          InputProps={{
-            endAdornment: (
-              <Button 
-                onClick={() => setShowPassword(!showPassword)}
-                sx={{ minWidth: 'auto', p: 0 }}
-              >
-                {showPassword ? <VisibilityOff /> : <Visibility />}
-              </Button>
-            ),
+          slotProps={{
+            input: {
+              endAdornment: (
+                <Button 
+                  onClick={() => setShowPassword(!showPassword)}
+                  sx={{ minWidth: 'auto', p: 0 }}
+                >
+                  {showPassword ? <VisibilityOff /> : <Visibility />}
+                </Button>
+              ),
+            },
           }}
         />
         <FormControlLabel
