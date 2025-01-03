@@ -3,14 +3,14 @@ import { useNavigate } from 'react-router-dom';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from './firebase';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
-import { 
+import {
   TextField,
   Button,
   Checkbox,
   Box,
   Paper,
   Typography,
-  FormControlLabel, 
+  FormControlLabel,
   CircularProgress
 } from '@mui/material';
 
@@ -60,7 +60,8 @@ const Login = () => {
       // sign in with Firebase
       await signInWithEmailAndPassword(auth, username, password);
 
-      // ff successful, navigate to tasks page
+      // if successful, navigate to path "/tasks"
+      // component for "/tasks" path is defined in App.jsx 
       navigate('/tasks');
 
     } catch (error) {
@@ -85,80 +86,80 @@ const Login = () => {
     }
   };
 
-return (
-  <Box sx={{
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    minHeight: '100vh',
-    bgcolor: '#e6f2ff',
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-  }}>
-    <Paper elevation={3} sx={{ p: 4, width: '100%', maxWidth: 400 }}>
-      <Typography variant="h5" sx={{ color: '#1e40af', textAlign: 'center', mb: 3 }}>
-        Login
-      </Typography>
-      <Box component="form" onSubmit={handleSubmit} sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-        <TextField
-          fullWidth
-          type="email"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          placeholder="Email"
-          variant="outlined"
-        />
-        <TextField
-          fullWidth
-          type={showPassword ? "text" : "password"}
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          placeholder="Password"
-          variant="outlined"
-          slotProps={{
-            input: {
-              endAdornment: (
-                <Button 
-                  onClick={() => setShowPassword(!showPassword)}
-                  sx={{ minWidth: 'auto', p: 0 }}
-                >
-                  {showPassword ? <VisibilityOff /> : <Visibility />}
-                </Button>
-              ),
-            },
-          }}
-        />
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={rememberMe}
-              onChange={(e) => setRememberMe(e.target.checked)}
-              color="primary"
-            />
-          }
-          label="Remember Me"
-        />
-        {error && (
-          <Typography color="error" variant="body2">
-            {error}
-          </Typography>
-        )}
-        <Button
-          type="submit"
-          variant="contained"
-          disabled={loading}
-          fullWidth
-          sx={{ mt: 2 }}
-        >
-          {loading && <CircularProgress size={20} sx={{ mr: 1 }} color="inherit" />}
-          {loading ? 'Logging in...' : 'Login'}
-        </Button>
-      </Box>
-    </Paper>
-  </Box>
+  return (
+    <Box sx={{
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      minHeight: '100vh',
+      bgcolor: '#e6f2ff',
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+    }}>
+      <Paper elevation={3} sx={{ p: 4, width: '100%', maxWidth: 400 }}>
+        <Typography variant="h5" sx={{ color: '#1e40af', textAlign: 'center', mb: 3 }}>
+          Login
+        </Typography>
+        <Box component="form" onSubmit={handleSubmit} sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+          <TextField
+            fullWidth
+            type="email"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            placeholder="Email"
+            variant="outlined"
+          />
+          <TextField
+            fullWidth
+            type={showPassword ? "text" : "password"}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="Password"
+            variant="outlined"
+            slotProps={{
+              input: {
+                endAdornment: (
+                  <Button
+                    onClick={() => setShowPassword(!showPassword)}
+                    sx={{ minWidth: 'auto', p: 0 }}
+                  >
+                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                  </Button>
+                ),
+              },
+            }}
+          />
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={rememberMe}
+                onChange={(e) => setRememberMe(e.target.checked)}
+                color="primary"
+              />
+            }
+            label="Remember Me"
+          />
+          {error && (
+            <Typography color="error" variant="body2">
+              {error}
+            </Typography>
+          )}
+          <Button
+            type="submit"
+            variant="contained"
+            disabled={loading}
+            fullWidth
+            sx={{ mt: 2 }}
+          >
+            {loading && <CircularProgress size={20} sx={{ mr: 1 }} color="inherit" />}
+            {loading ? 'Logging in...' : 'Login'}
+          </Button>
+        </Box>
+      </Paper>
+    </Box>
   );
 };
 
